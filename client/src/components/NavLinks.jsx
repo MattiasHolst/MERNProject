@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import links from "../utils/links";
 import { useDashboardContext } from "../pages/DashboardLayout";
 
-const NavLinks = () => {
+const NavLinks = ({ isBigSidebar }) => {
   const { toggleSidebar, user } = useDashboardContext();
   return (
     <div className="nav-links">
@@ -13,7 +13,7 @@ const NavLinks = () => {
             to={path}
             key={text}
             className="nav-link"
-            onClick={toggleSidebar}
+            onClick={isBigSidebar ? null : toggleSidebar}
             end
           >
             <span className="icon">{icon}</span>
