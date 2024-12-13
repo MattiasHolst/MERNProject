@@ -8,6 +8,9 @@ import mongoose from "mongoose";
 //routers
 import jobRouter from "./routes/jobRouter.js";
 
+//Middleware
+import errorHandlerMiddleWare from "./middleware/errorHandlerMiddleware.js";
+
 dotenv.config();
 
 const app = express();
@@ -28,10 +31,7 @@ app.use("*", (req, res) => {
   res.status(404).json({ message: "Not Found" });
 });
 
-app.use((err, req, res, next) => {
-  console.log(err);
-  res.status(500).json({ message: "Something went wrong" });
-});
+app.use(errorHandlerMiddleWare);
 
 const port = process.env.PORT || 5100;
 
