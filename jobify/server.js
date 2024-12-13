@@ -1,3 +1,4 @@
+import "express-async-errors";
 import express from "express";
 import morgan from "morgan";
 import * as dotenv from "dotenv";
@@ -43,5 +44,3 @@ try {
   console.log(error);
   process.exit(1);
 }
-
-
