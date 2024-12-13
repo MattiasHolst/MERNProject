@@ -21,14 +21,24 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
+// GET ALL JOBS
 app.get("/api/v1/jobs", (req, res) => {
-  res.status(200).json({jobs});
+  res.status(200).json({ jobs });
 });
 
-app.post("/", (req, res) => {
-  console.log(req);
+// CREATE JOB
+app.post("/api/v1/jobs", (req, res) => {
+  const { company, position } = req.body;
+  if (!company || !position) {
+    return res
+      .status(400)
+      .json({ message: "Please provide company and position" });
+  }
+  const id = nanoid();
+  const job = { id, company, position };
 
-  res.json({ message: "Data recieved", data: req.body });
+  jobs.push(job);
+  res.status(200).json({ job });
 });
 
 const port = process.env.PORT || 5100;
