@@ -2,8 +2,8 @@ import "express-async-errors";
 import express from "express";
 import morgan from "morgan";
 import * as dotenv from "dotenv";
-import { nanoid } from "nanoid";
 import mongoose from "mongoose";
+import { body, validationResult } from "express-validator";
 
 //routers
 import jobRouter from "./routes/jobRouter.js";
@@ -15,15 +15,33 @@ dotenv.config();
 
 const app = express();
 
-let jobs = [
-  { id: nanoid(), company: "apple", position: "front-end" },
-  { id: nanoid(), company: "google", position: "back-end" },
-];
-
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 app.use(express.json());
+
+app.post(
+  "/api/v1/test",
+  [
+    body("name")
+      .notEmpty()
+      .withMessage("name is required")
+      .isLength({ min: 50 })
+      .withMessage("Name must be at least 50 characters"),
+  ],
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const errorMessages = errors.array().map((error) => error.msg);
+      return res.status(400).json({ errors: errorMessages });
+    }
+    next();
+  },
+  (req, res) => {
+    const { name } = req.body;
+    res.json({ message: `Hello ${name}` });
+  }
+);
 
 app.use("/api/v1/jobs", jobRouter);
 
