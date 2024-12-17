@@ -6,7 +6,7 @@ export const getCurrentUser = async (req, res) => {
   const { userId } = req.user;
   const user = await User.findOne({ _id: userId });
   const userWithoutPassword = user.toJSON();
-  res.status(StatusCodes.OK).json({ userWithoutPassword });
+  res.status(StatusCodes.OK).json({ user: userWithoutPassword });
 };
 
 export const getApplicationStats = async (req, res) => {
