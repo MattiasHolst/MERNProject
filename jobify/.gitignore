@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 # Env
 .env
+
+# public
+/public
