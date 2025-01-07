@@ -8,3 +8,4 @@ export { default as JobsContainer } from "./JobsContainer";
 export { default as SearchContainer } from "./SearchContainer";
 export { default as StatItem } from "./StatItem";
 export { default as SubmitBtn } from "./SubmitBtn";
+export { default as StatsContainer } from "./StatsContainer";
