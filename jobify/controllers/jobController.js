@@ -5,7 +5,20 @@ import day from "dayjs";
 
 // GET ALL JOBS
 export const getAllJobs = async (req, res) => {
-  const jobs = await Job.find({ createdBy: req.user.userId });
+  const { search } = req.query;
+
+  const queryObject = {
+    createdBy: req.user.userId,
+  };
+
+  if (search) {
+    queryObject.$or = [
+      { position: { $regex: search, $options: "i" } },
+      { company: { $regex: search, $options: "i" } },
+    ];
+  }
+
+  const jobs = await Job.find(queryObject);
   res.status(StatusCodes.OK).json({ jobs });
 };
 
@@ -72,17 +85,19 @@ export const showStats = async (req, res) => {
     { $limit: 6 },
   ]);
 
-  monthlyApplications = monthlyApplications.map((item) => {
-    const {
-      _id: { year, month },
-      count,
-    } = item;
-    const date = day()
-      .month(month - 1)
-      .year(year)
-      .format("MMM YY");
-    return { date, count };
-  }).reverse();
+  monthlyApplications = monthlyApplications
+    .map((item) => {
+      const {
+        _id: { year, month },
+        count,
+      } = item;
+      const date = day()
+        .month(month - 1)
+        .year(year)
+        .format("MMM YY");
+      return { date, count };
+    })
+    .reverse();
 
   res.status(StatusCodes.OK).json({ defaultStats, monthlyApplications });
 };
