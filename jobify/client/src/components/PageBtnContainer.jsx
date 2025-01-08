@@ -12,9 +12,25 @@ const PageBtnContainer = () => {
     return index + 1;
   });
 
+  const { search, pathname } = useLocation();
+  const navigate = useNavigate();
+
+  const handlePageChange = (pageNumber) => {
+    const searchParams = new URLSearchParams(search);
+    searchParams.set("page", pageNumber);
+    navigate(`${pathname}?${searchParams.toString()}`);
+  };
+
   return (
     <Wrapper>
-      <button className="btn prev-btn">
+      <button
+        className="btn prev-btn"
+        onClick={() => {
+          let prevPage = currentPage - 1;
+          if (prevPage < 1) prevPage = 1;
+          handlePageChange(prevPage);
+        }}
+      >
         <HiChevronDoubleLeft />
         Prev
       </button>
@@ -26,13 +42,21 @@ const PageBtnContainer = () => {
                 pageNumber === currentPage && "active"
               }`}
               key={pageNumber}
+              onClick={() => handlePageChange(pageNumber)}
             >
               {pageNumber}
             </button>
           );
         })}
       </div>
-      <button className="btn prev-btn">
+      <button
+        className="btn prev-btn"
+        onClick={() => {
+          let nextPage = currentPage + 1;
+          if (nextPage > numOfPages) nextPage = numOfPages;
+          handlePageChange(nextPage);
+        }}
+      >
         Next
         <HiChevronDoubleRight />
       </button>
